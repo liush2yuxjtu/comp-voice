@@ -1,0 +1,17 @@
+{
+  "name": "comp-voice",
+  "version": "0.1.0",
+  "description": "Turn an audio recording plus enterprise context (Slack, Notion, Atlassian, Feishu-paste) into a 微信公众号 draft and optional internal-comms update. Orchestrates internal-comms, enterprise-search, slack, marketing:draft-content, and talk-html — owns only the 公众号 voice + audio glue + pipeline.",
+  "author": {
+    "name": "m1"
+  },
+  "keywords": [
+    "wechat",
+    "公众号",
+    "content",
+    "audio",
+    "transcription",
+    "orchestration",
+    "internal-comms"
+  ]
+}

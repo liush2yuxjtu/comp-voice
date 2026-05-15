@@ -1,0 +1,13 @@
+# Per-project comp-voice settings (paths to your local corpora)
+.claude/comp-voice.local.md
+.claude/*.local.md
+
+# Judge harness output (per-run, regenerable)
+.judge/
+
+# Transcripts produced by transcribe-audio
+*.transcript.txt
+*.transcript.json
+
+# OS noise
+.DS_Store
