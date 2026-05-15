@@ -1,0 +1,57 @@
+{
+  "run_id": "golden-run-2026-05-15",
+  "scenario": "30-min internal eng discussion about LLM prompt cache rollout → 微信公众号 draft",
+  "exit_code": 0,
+  "pipeline_steps": [
+    "transcribe-audio",
+    "enterprise-search",
+    "slack-search",
+    "wechat-mp-corpus-tone-lift",
+    "synthesis",
+    "draft",
+    "preview-html",
+    "judge-emit"
+  ],
+  "metrics": {
+    "transcript_chars": 1842,
+    "transcript_speaker_turns": 18,
+    "sources_found": {
+      "enterprise": 4,
+      "slack": 6,
+      "feishu": 0,
+      "mp_corpus": 1
+    },
+    "synthesis_section_count": 6,
+    "draft_word_count_cn": 1697,
+    "draft_word_count_total": 2389,
+    "default_length_target": 2500,
+    "band_status": "within_default_band_2000_3500",
+    "sections_present": ["引言", "正文 §1", "正文 §2", "正文 §3", "正文 §4", "正文 §5", "结语"],
+    "missing_sections": [],
+    "image_prompts": 4,
+    "tables_present": 2,
+    "internal_update_generated": false,
+    "html_preview_generated": true,
+    "compliance_checks": {
+      "customer_names_anonymized": true,
+      "internal_infra_redacted": true,
+      "data_within_disclosable_list": true
+    },
+    "cross_source_grounding": {
+      "60_percent_cost_drop": ["transcript:00:23", "slack:#eng-llm:2026-04-29", "slack:#eng-llm:2026-05-13"],
+      "p50_745ms": ["transcript:00:44", "slack:#eng-llm:2026-04-29"],
+      "71_74_hit_rate": ["transcript:01:02", "enterprise:Confluence-Hit-2"],
+      "three_preconditions": ["transcript:03:29"],
+      "two_alternatives_rejected": ["transcript:04:02"]
+    }
+  },
+  "judge_criteria_tiers": {
+    "tier_1_pipeline_integrity": "PASS — all 8 pipeline steps produced output, evidence dir complete",
+    "tier_2_draft_quality_structural": "PASS — 5 主体 sections + 引言/结语, 2 tables, 4 image prompt slots, within 2000-3500 band",
+    "tier_3_human_correctness": "DEFERRED — requires human verification that the technical claims (prefix-based caching, 1.25x write / 0.1x read pricing) match Anthropic's actual docs at publish time"
+  },
+  "notes": "This is a curated golden-run example, not a live capture. The transcript is hand-written to model a plausible 30-min discussion; enterprise/slack hits are hand-written to model what the corresponding MCP servers would have returned. judge.json structure matches what compose-mp emits on real runs. Use as: visual reference for what compose-mp output should look like, AND as a fixture for downstream judge harnesses.",
+  "evidence_dir": "examples/golden-run/",
+  "stdout_path": "examples/golden-run/draft.md",
+  "preview_path": "examples/golden-run/preview.html"
+}

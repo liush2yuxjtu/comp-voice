@@ -1,0 +1,6 @@
+examples/golden-run/preview.html
+
+(In a real run this would be a gist URL, e.g.
+ https://gist.githubusercontent.com/<user>/<id>/raw/preview.html.
+ In the golden-run example we ship the static file so reviewers can open it
+ without installing talk-html or hitting a gist.)
