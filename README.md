@@ -6,6 +6,8 @@
 
 📁 See [`examples/golden-run/`](examples/golden-run/) for a complete pipeline artifact tree you can read without installing anything — input transcript → enterprise context → Slack hits → synthesis → 公众号 draft → preview HTML → `judge.json`. That folder is the fastest way to understand what this plugin actually produces.
 
+🖼️ **Live demo (real vault run, 4 embedded screenshots):** [rendered preview](https://htmlpreview.github.io/?https://gist.githubusercontent.com/LiuShiyuMath/fa1a8c0f025fee7b10d40241cc04e435/raw/last-night-8-likes-v2-20260515-151200.html) · [source gist](https://gist.github.com/LiuShiyuMath/fa1a8c0f025fee7b10d40241cc04e435) — what `compose-mp --preview-html` actually emits when wired to a real corpus.
+
 🌐 Landing page: <https://liushiyumath.github.io/comp-voice/>
 
 ---
