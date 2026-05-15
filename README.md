@@ -5,12 +5,12 @@ Turn an audio recording + enterprise context into a **微信公众号** draft (a
 ## What this plugin does (and doesn't)
 
 ```
-audio (m4a/mp3/wav)               ─┐
-+ /enterprise-search results       │
-+ /slack:slack-search results      ├──►  公众号 draft (markdown)
-+ pasted Feishu content            │     + optional /internal-comms 3P update
-+ local 公众号 corpus (style+dedup)│     + optional /talk-html gist preview
-                                  ─┘     + .judge/$run_id/judge.json
+audio (m4a/mp3/wav)                     ─┐
++ /enterprise-search (or vendored)       │
++ /slack:slack-search (or vendored)      ├──►  公众号 draft (markdown)
++ pasted Feishu content                  │     + optional /internal-comms (or vendored)
++ local 公众号 corpus (style+dedup)      │     + optional /talk-html gist preview
+                                        ─┘     + .judge/$run_id/judge.json
 ```
 
 **This plugin owns** only what's missing on disk:
@@ -31,13 +31,26 @@ If you don't have those plugins installed, comp-voice still runs — it just ski
 
 ## Components
 
+**Own skills** (the unique value of this plugin):
+
 | Type | Name | Triggered by |
 |---|---|---|
 | Skill (slash) | `compose-mp` | `/comp-voice:compose-mp <audio-path>` or "draft a 公众号 article from this recording" |
 | Skill (auto) | `transcribe-audio` | "transcribe this", "录音转文字", or auto-routed by `compose-mp` |
 | Skill (auto) | `preview-mp` | "preview the MP article as HTML", "看看排版", or auto-routed by `compose-mp --preview-html` |
 
-No agents, no hooks, no MCP. Three skills, one pipeline.
+**Vendored skills** (verbatim copies of upstream — comp-voice works standalone). See `skills/VENDORED.md` for attribution + update recipes.
+
+| Vendored slash | Upstream source | Role in pipeline |
+|---|---|---|
+| `/comp-voice:vendored-enterprise-search` | `enterprise-search:search` 1.2.0 | Step 3a fallback |
+| `/comp-voice:vendored-slack-search` | `slack:slack-search` 1.0.0 | Step 3b fallback |
+| `/comp-voice:vendored-internal-comms` | user-level `internal-comms` | Step 7 fallback (`--with-internal-update`) |
+| `/comp-voice:vendored-draft-content` | `marketing:draft-content` 1.2.0 | Content-pattern reference |
+
+Resolution rule: compose-mp **prefers upstream** if loaded, **falls back to vendored** if not. License files preserved alongside each copy.
+
+No agents, no hooks, no MCP.
 
 ## Install
 
@@ -59,12 +72,12 @@ Then either restart Claude Code or run `/reload-plugins`.
   - `pip install openai-whisper` (any platform)
   - `brew install whisper-cpp` (fast CPU)
   - …or paste a transcript and skip transcription entirely
-- One or more of the delegated plugins for richer context:
-  - `enterprise-search` plugin (for Slack/Notion/Atlassian/MS365 search)
-  - `slack` plugin (for direct Slack search/digest)
-  - `internal-comms` skill (for the English internal-update flavor)
-  - `talk-html` skill (for the HTML preview/gist)
-  - `marketing` plugin (for drafting reference patterns)
+- (Optional) Upstream plugins for fresher / better-maintained versions of the delegated skills — comp-voice prefers these if loaded, otherwise falls back to its bundled vendored copies:
+  - `enterprise-search` plugin (Slack/Notion/Atlassian/MS365 search)
+  - `slack` plugin (direct Slack search/digest)
+  - `internal-comms` skill (English internal-update flavor)
+  - `marketing` plugin (drafting reference patterns)
+  - `talk-html` skill (HTML preview/gist) — **not vendored**, so HTML preview needs this installed
 
 **Optional** local setup:
 

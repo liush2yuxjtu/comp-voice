@@ -49,14 +49,14 @@ Never invent transcript content. If transcription fails, surface the error and s
 
 ### 3. Gather enterprise context
 
-Run these in **parallel** (independent calls in one message):
+Run these in **parallel** (independent calls in one message). Use the **upstream** slash name if loaded, else fall back to the **vendored** copy bundled in this plugin:
 
-1. `/enterprise-search:search` with a query derived from the transcript's main topic. Save result to `.judge/$run_id/enterprise.md`.
-2. `/slack:slack-search` with the same topic if Slack-specific channels are mentioned. Save to `.judge/$run_id/slack.md`.
+1. Enterprise search — prefer `/enterprise-search:search`, fallback `/comp-voice:vendored-enterprise-search`. Query derived from transcript's main topic. Save to `.judge/$run_id/enterprise.md`.
+2. Slack search — prefer `/slack:slack-search`, fallback `/comp-voice:vendored-slack-search`. Use only if Slack-specific channels are mentioned. Save to `.judge/$run_id/slack.md`.
 3. Glob `$wechat_archive/*.md` if configured. Read up to 5 most recent. Save concatenated to `.judge/$run_id/mp-corpus.md` — used for **style** and **topic-dedup** (don't rewrite something already published).
 4. Glob `$feishu_export/*.md` if configured. Read all. Save to `.judge/$run_id/feishu.md`.
 
-If `/enterprise-search:search` returns "no MCP sources connected", continue without enterprise context — do not block. Note the gap in the judge JSON.
+If enterprise search returns "no MCP sources connected", continue without enterprise context — do not block. Note the gap in the judge JSON.
 
 ### 4. Ask the user for pasted Feishu content (only if not in folder)
 
@@ -114,7 +114,7 @@ Target length: `$default_length` ± 20%. Honor `$brand_voice`. Cite no source at
 
 ### 7. Optional: internal-comms version
 
-If `--with-internal-update` was passed, after the draft, invoke `/internal-comms` with this framing:
+If `--with-internal-update` was passed, after the draft, invoke internal-comms — prefer `/internal-comms`, fallback `/comp-voice:vendored-internal-comms`. Frame it as:
 
 > "Write a 3P-update style internal note summarizing the same topic for English-speaking colleagues. Source: the transcript and synthesis in `.judge/$run_id/`. Length: ~250 words."
 
@@ -176,13 +176,7 @@ Do not summarize the article content itself — the user can read the file.
 
 ## Related skills (do not re-implement)
 
-- `transcribe-audio` (this plugin) — audio → text glue
-- `preview-mp` (this plugin) — wraps `/talk-html` for HTML preview/gist
-- `/enterprise-search:search` — Slack/Notion/Atlassian/Asana/Guru/MS365
-- `/enterprise-search:knowledge-synthesis` — multi-source synthesis patterns
-- `/slack:slack-search` — Slack-specific deep search
-- `/internal-comms` — English 3P / newsletter / FAQ flavors
-- `/marketing:draft-content` — generic content drafting patterns
+Own: `transcribe-audio` (audio glue), `preview-mp` (wraps `/talk-html`). Delegated — prefer upstream, fallback vendored (`/comp-voice:vendored-*`): enterprise-search:search · slack:slack-search · internal-comms · marketing:draft-content. See `skills/VENDORED.md` for full attribution table. Also useful if loaded: `/enterprise-search:knowledge-synthesis`, `/talk-html`.
 
 ## References
 
