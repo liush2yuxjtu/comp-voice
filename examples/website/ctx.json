@@ -1,0 +1,22 @@
+{
+  "productName": "comp-voice",
+  "tagline": "录音变公众号草稿",
+  "category": "Claude Code plugin",
+  "domain": "github.com/LiuShiyuMath/comp-voice",
+  "problem": "把一场会议录音变成公众号文章，要听写、跨工具查上下文、写初稿、调腔调、查重 — 一个人来回切 5 个工具，半天没了。",
+  "solution": "comp-voice 把录音、enterprise-search、slack 搜索、公众号语料、internal-comms 串成一条流水线，最后输出可直接粘进公众号编辑器的 markdown 草稿，并把所有中间证据落盘交给第三方 LLM 做裁判。",
+  "why_now": "Claude Code plugin 生态成熟，已有 enterprise-search / slack / internal-comms / talk-html 等基建 — 缺的只是公众号腔调 + 录音 glue + 编排。",
+  "target_customer": "需要把内部技术讨论写成对外公众号的研发负责人 / 技术品牌团队 / 独立开发者",
+  "features": [
+    { "title": "录音直转草稿", "description": "本地 whisper 一行命令把 m4a/mp3/wav 变成可编辑 transcript。", "icon": "🎙" },
+    { "title": "跨源拼上下文", "description": "调 enterprise-search 把 Slack / Notion / Atlassian 自动织进背景。", "icon": "🔍" },
+    { "title": "公众号腔调", "description": "内置 voice rules + 本地历史文章语料，避免 AI 通用味。", "icon": "✒️" },
+    { "title": "只补缺不重写", "description": "优先复用你已装的 skill，缺啥才用 vendored 兜底。", "icon": "🧩" },
+    { "title": "第三方 judge", "description": "全部证据落 .judge/<run_id>/judge.json，不让模型自评。", "icon": "⚖️" },
+    { "title": "一键 HTML 预览", "description": "talk-html 把草稿渲染成可分享的 gist 预览链接。", "icon": "🌐" }
+  ],
+  "primary_cta": { "text": "Install on GitHub", "url": "https://github.com/LiuShiyuMath/comp-voice" },
+  "primary_color": "#C2410C",
+  "bg_color": "#FAF7F2",
+  "elevator_pitch": "comp-voice — 把录音、企业知识、公众号腔调拼成一条流水线，输出可直接粘进编辑器的 markdown 草稿，并把所有证据交给第三方裁判。"
+}
