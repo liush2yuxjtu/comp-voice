@@ -8,6 +8,7 @@
   "why_now": "Claude Code plugin 生态成熟 — enterprise-search / slack / internal-comms / talk-html 都已存在。缺的不是基建，是把它们捏成一条公众号 workflow 的胶水。",
   "market_size": "中国 350 万微信公众号运营者 + 全球技术品牌团队",
   "target_customer": "需要把内部技术讨论写成对外公众号的研发负责人 / 技术品牌团队 / 独立开发者",
+  "demo_video_path": "https://liushiyumath.github.io/comp-voice/comp-voice.mp4",
   "features": [
     { "title": "录音直转草稿", "description": "本地 whisper 一行命令把 m4a/mp3/wav 变成可编辑 transcript。", "icon": "🎙" },
     { "title": "跨源拼上下文", "description": "调 enterprise-search 把 Slack / Notion / Atlassian 自动织进背景。", "icon": "🔍" },
