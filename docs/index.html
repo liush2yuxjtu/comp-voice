@@ -198,6 +198,40 @@ img, video, svg { max-width: 100%; display: block; }
   color: var(--muted);
 }
 .pk-hero-actions { display: flex; gap: 0.875rem; flex-wrap: wrap; justify-content: center; }
+.pk-hero-terminal {
+  display: inline-flex; align-items: center; gap: 0.85rem;
+  font-family: var(--mono);
+  font-size: clamp(0.78rem, 1.4vw, 0.92rem);
+  background: color-mix(in srgb, var(--fg) 5%, transparent);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 0.85rem 1.15rem;
+  max-width: 100%;
+  overflow-x: auto;
+  color: var(--fg);
+}
+.pk-hero-term-prompt {
+  color: var(--accent);
+  font-weight: 600;
+  user-select: none;
+}
+.pk-hero-terminal code { white-space: nowrap; }
+.pk-hero-sub {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  max-width: 52rem;
+  margin: 0;
+}
+.pk-hero-sub code {
+  font-family: var(--mono);
+  color: var(--fg);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  padding: 0.08rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.78rem;
+}
 .pk-btn {
   display: inline-flex; align-items: center; gap: 0.5em;
   padding: 0.95rem 1.875rem;
@@ -281,7 +315,7 @@ img, video, svg { max-width: 100%; display: block; }
   gap: clamp(1.5rem, 4vw, 3rem);
   column-rule: 1px solid var(--rule);
 }
-@media (min-width: 800px) { .pk-stats-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 800px) { .pk-stats-grid { grid-template-columns: repeat(3, 1fr); } }
 .pk-stat { display: flex; flex-direction: column; gap: 0.4rem; }
 .pk-stat-value {
   font-family: var(--display);
@@ -410,7 +444,90 @@ img, video, svg { max-width: 100%; display: block; }
   margin-top: 1.25rem;
 }
 
-/* ── Pricing — paper cards ──────────────────────────────────────────────── */
+/* ── Evidence strip (4-panel proof, golden-run) ─────────────────────────── */
+.pk-evidence {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: 64rem;
+  margin: 0 auto 2.5rem;
+}
+@media (min-width: 760px) {
+  .pk-evidence { grid-template-columns: repeat(4, 1fr); }
+}
+.pk-evidence-cell {
+  position: relative;
+  border: 1px solid var(--rule);
+  border-radius: 0.85rem;
+  padding: 1.05rem 1rem 1.1rem;
+  background: color-mix(in srgb, var(--fg) 3%, transparent);
+  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease), background 0.2s var(--ease);
+  display: flex; flex-direction: column; gap: 0.55rem;
+  min-height: 9rem;
+}
+.pk-evidence-cell:hover {
+  border-color: var(--accent-dim);
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+.pk-evidence-step {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.pk-evidence-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.2;
+}
+.pk-evidence-file {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  word-break: break-all;
+}
+.pk-evidence-note {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+.pk-evidence-cell a.pk-evidence-link {
+  position: absolute; inset: 0;
+  font-size: 0; color: transparent;
+}
+.pk-evidence-arrow {
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: var(--accent);
+  font-family: var(--mono);
+}
+
+/* ── Install — terminal block ───────────────────────────────────────────── */
+.pk-install-block {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+.pk-install-pre {
+  font-family: var(--mono);
+  font-size: clamp(0.78rem, 1vw, 0.88rem);
+  line-height: 1.7;
+  background: color-mix(in srgb, var(--fg) 5%, transparent);
+  border: 1px solid var(--rule);
+  border-radius: 0.85rem;
+  padding: 1.4rem 1.5rem;
+  color: var(--fg);
+  overflow-x: auto;
+}
+.pk-install-pre code { font-family: inherit; color: inherit; }
+.pk-install-cmt { color: var(--muted); }
+
+/* ── Pricing — paper cards (legacy, unused) ─────────────────────────────── */
 .pk-pricing-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -621,7 +738,7 @@ img, video, svg { max-width: 100%; display: block; }
   margin-bottom: 2.5rem;
 }
 @media (min-width: 760px) {
-  .pk-foot-grid { grid-template-columns: 2fr 1fr 1fr 1.6fr; gap: 3rem; }
+  .pk-foot-grid { grid-template-columns: 2fr 1fr 1fr; gap: 3rem; }
 }
 .pk-foot-brand { font-family: var(--display); font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
 .pk-foot-blurb { font-size: 0.875rem; color: var(--muted); max-width: 22rem; line-height: 1.55; }
@@ -675,7 +792,7 @@ img, video, svg { max-width: 100%; display: block; }
 <header class="pk-mast">
   <div class="pk-wrap pk-mast-inner">
     <a href="#" class="pk-wordmark">comp-voice</a>
-    <a href="https://github.com/LiuShiyuMath/comp-voice" class="pk-mast-cta">View on GitHub</a>
+    <a href="https://github.com/LiuShiyuMath/comp-voice" class="pk-mast-cta">GitHub →</a>
   </div>
 </header>
 
@@ -685,11 +802,16 @@ img, video, svg { max-width: 100%; display: block; }
     <span class="pk-eyebrow"><span class="pk-eyebrow-dot"></span>Claude Code plugin</span>
     <h1>comp-voice</h1>
     <p class="pk-hero-tagline">录音直出公众号草稿</p>
-    <p class="pk-hero-pitch">comp-voice — 把录音、企业知识、公众号腔调拼成一条流水线，输出可直接粘进编辑器的 markdown 草稿，并把所有证据交给第三方裁判。</p>
+    <p class="pk-hero-pitch">不是再写一篇 AI 公众号，而是把<em class="pk-emph">录音、企业上下文、历史腔调和第三方评审证据</em>串成一条本地流水线 — 每篇草稿都有可追溯的证据目录。</p>
+    <div class="pk-hero-terminal" aria-label="example command">
+      <span class="pk-hero-term-prompt">$</span>
+      <code>/comp-voice:compose-mp ~/Recordings/meeting.m4a --preview-html --emit-judge</code>
+    </div>
+    <p class="pk-hero-sub">输出: <code>transcript.txt</code> → <code>enterprise.md</code> + <code>slack.md</code> → <code>synthesis.md</code> → <code>draft.md</code> → <code>preview.html</code> + <code>judge.json</code></p>
     <div class="pk-hero-actions">
-        <a class="pk-btn pk-btn-primary" href="https://github.com/LiuShiyuMath/comp-voice">View on GitHub →</a>
-        
-      </div>
+      <a class="pk-btn pk-btn-primary" href="#demo">See generated evidence →</a>
+      <a class="pk-btn pk-btn-ghost" href="https://github.com/LiuShiyuMath/comp-voice">Run it locally</a>
+    </div>
     <span class="pk-scroll-cue">Scroll</span>
   </div>
 </section>
@@ -700,19 +822,19 @@ img, video, svg { max-width: 100%; display: block; }
     <div class="pk-stats-grid">
       
         <div class="pk-stat">
-          <div class="pk-stat-value">3+4</div>
-          <div class="pk-stat-delta">own + vendored</div>
-          <div class="pk-stat-label">Skills shipped</div>
-        </div>
-        <div class="pk-stat">
-          <div class="pk-stat-value">10</div>
-          <div class="pk-stat-delta">audio → draft</div>
-          <div class="pk-stat-label">Pipeline steps</div>
+          <div class="pk-stat-value">8</div>
+          <div class="pk-stat-delta">audio → judge.json</div>
+          <div class="pk-stat-label">Pipeline stages</div>
         </div>
         <div class="pk-stat">
           <div class="pk-stat-value">0</div>
-          <div class="pk-stat-delta">vendored fallback</div>
-          <div class="pk-stat-label">External deps</div>
+          <div class="pk-stat-delta">audio stays on disk</div>
+          <div class="pk-stat-label">Cloud uploads</div>
+        </div>
+        <div class="pk-stat">
+          <div class="pk-stat-value">9</div>
+          <div class="pk-stat-delta">per run, traceable</div>
+          <div class="pk-stat-label">Evidence files</div>
         </div>
     </div>
   </div>
@@ -779,35 +901,68 @@ img, video, svg { max-width: 100%; display: block; }
 <section class="pk-section" id="demo">
   <div class="pk-wrap">
     <div class="pk-section-head">
-      <div class="pk-section-num">04 — In Motion</div>
-      <h2>See <em class="pk-emph">comp-voice</em> in action.</h2>
+      <div class="pk-section-num">04 — Evidence trail</div>
+      <h2>Every run leaves a <em class="pk-emph">paper trail.</em></h2>
+      <p class="lead">A real golden-run sits in the repo — open any file directly. No install, no sign-in, no SaaS upload.</p>
     </div>
+
+    <div class="pk-evidence">
+      <article class="pk-evidence-cell">
+        <span class="pk-evidence-step">01 · Capture</span>
+        <h3 class="pk-evidence-title">5 min 内部讨论<span class="pk-evidence-arrow">→</span></h3>
+        <code class="pk-evidence-file">input-transcript.txt</code>
+        <p class="pk-evidence-note">18 speaker turns, timestamped. 本地 whisper, audio 不出本机.</p>
+        <a class="pk-evidence-link" href="https://github.com/LiuShiyuMath/comp-voice/blob/main/examples/golden-run/input-transcript.txt">open</a>
+      </article>
+
+      <article class="pk-evidence-cell">
+        <span class="pk-evidence-step">02 · Context</span>
+        <h3 class="pk-evidence-title">企业 + Slack 上下文<span class="pk-evidence-arrow">→</span></h3>
+        <code class="pk-evidence-file">enterprise.md · slack.md</code>
+        <p class="pk-evidence-note">4 Notion/Confluence hits + 6 Slack 消息, 每条标注下游怎么用.</p>
+        <a class="pk-evidence-link" href="https://github.com/LiuShiyuMath/comp-voice/tree/main/examples/golden-run">open</a>
+      </article>
+
+      <article class="pk-evidence-cell">
+        <span class="pk-evidence-step">03 · Synthesis + draft</span>
+        <h3 class="pk-evidence-title">骨架 → 公众号草稿<span class="pk-evidence-arrow">→</span></h3>
+        <code class="pk-evidence-file">synthesis.md · draft.md</code>
+        <p class="pk-evidence-note">2389 字, 7 sections, 2 tables, 4 配图槽. 在默认 2000-3500 band 内.</p>
+        <a class="pk-evidence-link" href="https://github.com/LiuShiyuMath/comp-voice/blob/main/examples/golden-run/draft.md">open</a>
+      </article>
+
+      <article class="pk-evidence-cell">
+        <span class="pk-evidence-step">04 · Judge</span>
+        <h3 class="pk-evidence-title">Preview + judge.json<span class="pk-evidence-arrow">→</span></h3>
+        <code class="pk-evidence-file">preview.html · judge.json</code>
+        <p class="pk-evidence-note">机器可读裁判记录: 跨源 grounding、tier 1/2/3 verdict、合规清单. 模型不自评.</p>
+        <a class="pk-evidence-link" href="https://github.com/LiuShiyuMath/comp-voice/blob/main/examples/golden-run/judge.json">open</a>
+      </article>
+    </div>
+
     <div class="pk-demo-frame">
       <video src="https://liushiyumath.github.io/comp-voice/comp-voice.mp4" autoplay muted loop playsinline controls></video>
     </div>
-    <p class="pk-demo-caption">90 seconds · sound off · no signup</p>
+    <p class="pk-demo-caption">90 seconds · sound off · no signup · golden-run: <a href="https://github.com/LiuShiyuMath/comp-voice/tree/main/examples/golden-run" style="color:var(--accent);">examples/golden-run/</a></p>
   </div>
 </section>
 
-<section class="pk-section" id="pricing">
+<section class="pk-section" id="install">
   <div class="pk-wrap">
     <div class="pk-section-head">
-      <div class="pk-section-num">05 — Pricing</div>
-      <h2>Honest pricing. <em class="pk-emph">No surprises.</em></h2>
+      <div class="pk-section-num">05 — Install</div>
+      <h2>Two lines, <em class="pk-emph">your machine.</em></h2>
+      <p class="lead">MIT licensed. Self-hosted. Vendored fallbacks for every upstream plugin — works even without enterprise-search / slack / talk-html installed.</p>
     </div>
-    <div class="pk-pricing-grid">
-      
-        <div class="pk-price featured">
-          <span class="pk-price-badge">Most popular</span>
-          <span class="pk-price-tier">Open Source</span>
-          <div class="pk-price-amount">
-            <span class="v">Free</span>
-            <span class="i">/forever</span>
-          </div>
-          <ul class="pk-price-features">
-            <li>MIT licensed</li><li>Self-hosted</li><li>Bring your own LLM</li>
-          </ul>
-        </div>
+    <div class="pk-install-block">
+      <pre class="pk-install-pre"><code><span class="pk-install-cmt"># 1. Clone & register the plugin into your Claude Code config</span>
+git clone https://github.com/LiuShiyuMath/comp-voice ~/projects/comp-voice
+<span class="pk-install-cmt"># point your ~/.claude/plugins/ at it (see CONNECTORS.md)</span>
+
+<span class="pk-install-cmt"># 2. Run on a real recording</span>
+/comp-voice:compose-mp ~/Recordings/meeting.m4a --preview-html --emit-judge
+
+<span class="pk-install-cmt"># Output lands in .judge/mp-&lt;timestamp&gt;/ — same shape as examples/golden-run/</span></code></pre>
     </div>
   </div>
 </section>
@@ -816,7 +971,7 @@ img, video, svg { max-width: 100%; display: block; }
 <section class="pk-section" id="team">
   <div class="pk-wrap">
     <div class="pk-section-head">
-      <div class="pk-section-num">07 — Built by</div>
+      <div class="pk-section-num">06 — Built by</div>
       <h2>A small team with <em class="pk-emph">opinions.</em></h2>
     </div>
     <div class="pk-team">
@@ -834,40 +989,48 @@ img, video, svg { max-width: 100%; display: block; }
 <section class="pk-section" id="faq">
   <div class="pk-wrap">
     <div class="pk-section-head">
-      <div class="pk-section-num">08 — Frequently asked</div>
+      <div class="pk-section-num">07 — Frequently asked</div>
       <h2>Common <em class="pk-emph">questions.</em></h2>
     </div>
     <div class="pk-faq">
-      
+
         <details class="pk-faq-item">
-          <summary class="pk-faq-q">Who is comp-voice actually for?</summary>
-          <div class="pk-faq-a">需要把内部技术讨论写成对外公众号的研发负责人 / 技术品牌团队 / 独立开发者. comp-voice — 把录音、企业知识、公众号腔调拼成一条流水线，输出可直接粘进编辑器的 markdown 草稿，并把所有证据交给第三方裁判。</div>
+          <summary class="pk-faq-q">我的录音会不会被上传到云?</summary>
+          <div class="pk-faq-a">不会. Transcription 走本地 whisper-family 模型, 音频文件留在你机器上. comp-voice 自己不发任何外网请求 — 只有你已经装的 Claude Code、enterprise-search、Slack 这些 plugin 会按它们各自的策略走网络.</div>
         </details>
+
         <details class="pk-faq-item">
-          <summary class="pk-faq-q">How does it work, in plain language?</summary>
-          <div class="pk-faq-a">comp-voice 把录音、enterprise-search、Slack 搜索、公众号语料、internal-comms 串成一条流水线，最后输出可直接粘进公众号编辑器的 markdown 草稿，并把所有中间证据落盘交给第三方 LLM 做裁判。</div>
+          <summary class="pk-faq-q">如果我没装 enterprise-search / slack / talk-html 怎么办?</summary>
+          <div class="pk-faq-a">能跑. 仓库里 vendored 了这四个 skill 的最小回退版本 (见 <code>skills/vendored-*</code>). 真有的就用真的, 没有就用回退 — 不会因为缺一个 upstream 就直接挂掉. 见 <a href="https://github.com/LiuShiyuMath/comp-voice/blob/main/CONNECTORS.md">CONNECTORS.md</a>.</div>
         </details>
+
         <details class="pk-faq-item">
-          <summary class="pk-faq-q">Is there a free plan?</summary>
-          <div class="pk-faq-a">No — pricing starts at Free. MIT licensed. Self-hosted.</div>
+          <summary class="pk-faq-q">飞书呢? 我们公司用的是飞书不是 Notion / Slack.</summary>
+          <div class="pk-faq-a">v0.1 不接飞书 OAuth — 那是一周工作量但只省一次粘贴. 当前做法: 直接把飞书文档内容贴进 prompt, 或者 export 成 md 喂给 enterprise-search 的 file source. Feishu MCP 等官方/社区版本出来再原生接入.</div>
         </details>
+
         <details class="pk-faq-item">
-          <summary class="pk-faq-q">Why now?</summary>
-          <div class="pk-faq-a">Claude Code plugin 生态成熟 — enterprise-search / slack / internal-comms / talk-html 都已存在。缺的不是基建，是把它们捏成一条公众号 workflow 的胶水。</div>
+          <summary class="pk-faq-q">judge.json 到底在评什么? 谁来打分?</summary>
+          <div class="pk-faq-a">compose-mp 不给自己打分, 只 dump 一份机器可读记录: pipeline 8 步是否都跑完、draft 字数/结构/合规清单、跨源 grounding 映射 (每条数据来自 transcript 哪一秒 + slack/notion 哪条). 然后由一只独立 LLM (haiku / 另一个 sonnet session) 只读 raw JSON + evidence 当裁判. 看真实样例: <code>examples/golden-run/judge.json</code>.</div>
         </details>
+
         <details class="pk-faq-item">
-          <summary class="pk-faq-q">Are you raising?</summary>
-          <div class="pk-faq-a">Currently raising Stars + feedback. Roadmap: Feishu MCP integration, 公众号 publishing API, built-in LLM judge</div>
+          <summary class="pk-faq-q">v0.1 没做的 (但有人会问)?</summary>
+          <div class="pk-faq-a">飞书 OAuth、公众号 publishing API、自动配图生成、Web UI、SaaS hosting. 都试过想清楚, 都没上 — 当前阶段把核心 evidence pipeline 做厚比堆 feature 重要. Roadmap 在 README 里, 不藏.</div>
         </details>
+
     </div>
   </div>
 </section>
 
 <section class="pk-cta">
   <div class="pk-wrap pk-cta-inner">
-    <h2>View on GitHub<br><span class="pk-emph">today.</span></h2>
-    <p class="pk-cta-tag">录音直出公众号草稿</p>
-    <a class="pk-btn pk-btn-primary" href="https://github.com/LiuShiyuMath/comp-voice" style="font-size:1.05rem;padding:1.05rem 2.25rem;">View on GitHub →</a>
+    <h2>Don't trust the draft.<br><span class="pk-emph">Read the trail.</span></h2>
+    <p class="pk-cta-tag">每篇草稿都有 9 个 evidence 文件 — open them, then decide.</p>
+    <div style="display:flex;gap:0.85rem;flex-wrap:wrap;justify-content:center;">
+      <a class="pk-btn pk-btn-primary" href="https://github.com/LiuShiyuMath/comp-voice/tree/main/examples/golden-run" style="font-size:1.05rem;padding:1.05rem 2.25rem;">See the golden-run →</a>
+      <a class="pk-btn pk-btn-ghost" href="https://github.com/LiuShiyuMath/comp-voice" style="font-size:1.05rem;padding:1.05rem 2.25rem;">Star on GitHub</a>
+    </div>
   </div>
 </section>
 
@@ -881,24 +1044,12 @@ img, video, svg { max-width: 100%; display: block; }
       
         <div class="pk-foot-col">
           <h4>Product</h4>
-          <a href="#features">Features</a><a href="#demo">Demo</a><a href="#pricing">Pricing</a>
+          <a href="#features">Features</a><a href="#demo">Evidence</a><a href="#install">Install</a><a href="#faq">FAQ</a>
         </div>
         <div class="pk-foot-col">
-          <h4>Company</h4>
-          <a href="#team">Team</a><a href="#">Press</a><a href="mailto:hello@liushiyumath.github.io/comp-voice">Contact</a>
+          <h4>Project</h4>
+          <a href="https://github.com/LiuShiyuMath/comp-voice">GitHub</a><a href="https://github.com/LiuShiyuMath/comp-voice/blob/main/CONNECTORS.md">CONNECTORS.md</a><a href="https://github.com/LiuShiyuMath/comp-voice/tree/main/examples/golden-run">Golden run</a><a href="#team">Author</a>
         </div>
-      <div class="pk-foot-col">
-        <h4>Stay updated</h4>
-        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.5rem;">One email a month. Honest, no spam.</p>
-        <form class="pk-newsletter-form" onsubmit="event.preventDefault();this.querySelector('button').textContent='Thanks ✓';">
-          <div style="display:flex;gap:0.5rem;">
-            <input type="email" placeholder="you@liushiyumath.github.io/comp-voice" required
-              style="flex:1;padding:0.55rem 0.85rem;border-radius:9999px;border:1px solid var(--rule);background:color-mix(in srgb,var(--fg) 3%,transparent);color:var(--fg);font:inherit;font-size:0.825rem;outline:none;">
-            <button type="submit"
-              style="padding:0.55rem 1rem;border-radius:9999px;border:0;background:var(--accent);color:var(--ink);font:inherit;font-weight:600;font-size:0.825rem;cursor:pointer;">→</button>
-          </div>
-        </form>
-      </div>
     </div>
     <div class="pk-foot-bottom">
       <div>© 2026 comp-voice · liushiyumath.github.io/comp-voice</div>
