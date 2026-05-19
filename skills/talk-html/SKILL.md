@@ -82,7 +82,10 @@ actual sources:
 Hard requirements:
 
 - **Language (load-bearing)**: All artifact content — title, lede, headings, body prose, captions, pull-quotes, CTA copy, footer text — **must be in Simplified Chinese (zh-CN)**. The only English allowed is: structural metadata (`<!-- talk-html-meta ... -->`), file paths, shell commands, code snippets, URLs, technical identifiers (slug, session id), and short inline tokens where a Chinese rendering would be confusing (e.g. `gh gist create`, `~/.agents/...`). Set `<html lang="zh-CN">` and include `<meta charset="utf-8">`. Avoid 中英夹杂 marketing speak ("我们 leverage best-of-breed solutions") — Chinese prose should read like a human wrote it.
-- **Self-contained**: inline CSS, no external JS. Google Fonts via `<link>` is allowed. The one sanctioned exception: inline `onclick` copy-to-clipboard handlers, **only** inside the audit pill (it carries two — `copy id` and copy-`claude --resume`). Nothing else gets script.
+- **Self-contained**: inline CSS, no external JS. Google Fonts via `<link>` is allowed. JS is sanctioned in exactly **two** narrow places, both pure clipboard utilities, never general page scripting:
+  1. the **audit pill** copy handlers — `copy id` and copy-`claude --resume` (§5);
+  2. the **“继续修改” bar** prompt builder (§5.1) — reads one text input and writes one clipboard string.
+  Both are inline `onclick`/IIFE handlers with no network, no timers, and no DOM mutation beyond reading their own input. They are utility chrome, not page content, so they do **not** count as “non-static content” under §3.1 (the same carve-out the pill always had). Anything past these two — animation, `fetch`, frameworks, reveal logic — is out of bounds; a page that seems to need it is the wrong job for this skill (use `frontend-design`).
 - **Editorial typography**: pair a Latin display/body family with **Noto Serif SC** (思源宋体) — the Chinese face must carry the body text, not fall through to a system default. Recommended pairings: Fraunces + Noto Serif SC, or Newsreader + Noto Serif SC. Name the typographic mood in one sentence (Chinese is fine); if you cannot, redo it.
 - **Diagrams**: SVG. Diagram labels in Chinese (or technical English where labels reference real identifiers like `index.jsonl`). Reserve ASCII art for explicit "terminal" flavor sections only.
 - **Reflow**: works on mobile (≤ 420 px). No fixed pixel heights that clip text. Chinese reflows differently from English — test the narrow viewport.
@@ -248,6 +251,59 @@ here too. (Name the harness — "Claude" / "Codex" — only if you are certain w
 one is running; otherwise the neutral "Made in session" is correct.) Do not put
 a `file://` link in the footer either.
 
+### 5.1 Add the “继续修改” bar (text input + copy-prompt)
+
+The audit pill answers *“which conversation made this?”*. It does **not** solve
+the very next thing a reader wants: they look at the finished page, want one
+detail changed, and today the only path is to hand-copy the file/gist URL into a
+terminal and improvise a prompt. That round-trip is exactly the friction this
+skill exists to kill. So **every page also carries a small “继续修改这页” bar**
+that turns “I want a tweak” into a single paste.
+
+Put it as its own labeled block just above the footer — not inside the pill, a
+text field has no business in an 11px pill. Three parts:
+
+- a one-line **text input** where the reader types the change they want
+  (Chinese placeholder, e.g. `描述要改什么，例如：把流程图改成横向 / 补一节风险`);
+- a **“复制续修指令” button** that assembles a complete CLI prompt from what
+  they typed and copies it to the clipboard;
+- one muted helper line: paste it into a terminal running Claude to continue.
+
+**The exact string the button must place on the clipboard** (with `INSTR` =
+whatever the reader typed):
+
+```
+claude --resume <session_id> "继续修改我用 talk-html 生成的产物（slug: <slug>；本地 <local_path>；若会话已失效，先跑 bash ~/.agents/skills/talk-html/recall.sh <slug> 定位它）。修改要求：INSTR。改完按 talk-html 流程重新发布 gist 并打印四个 URL。"
+```
+
+Why this shape, not just the URL the human would have pasted by hand:
+
+- It leads with `claude --resume <session_id>` because on the origin machine
+  that reloads the full context — Claude already knows the exact local file and
+  the gist it just published, so the follow-up is reliable and needs no URL.
+- It still **stands alone** if the session is gone or the reader is on another
+  machine: it names the artifact by `slug` and tells Claude to relocate it with
+  `recall.sh <slug>`, which reads `index.jsonl` (including the published
+  `rendered_url`). It must **not** lean on a `file://` path as the only handle —
+  that is dead in the gist (§3.0). The local path is a same-machine convenience,
+  listed alongside the durable handles, never instead of them.
+- It carries the reader's instruction *and* the re-publish step, so one paste
+  goes all the way from “I want X” to a fresh shareable link — no “resume, then
+  think of what to say.”
+
+Resolve `session_id`, `slug`, and `local_path` at generation time. `INSTR` is
+read live from the input. The mechanism is deliberately trivial: read
+`#tlh-ask`, fall back to a `<在此描述要改什么>` placeholder if it's empty (a
+curious click should never copy garbage), splice it into the template above,
+`navigator.clipboard.writeText(...)`. No other JS — this is the second and last
+sanctioned exception; see the Self-contained bullet in §3 for why it is bounded
+this tightly. It must behave identically in the published gist/htmlpreview
+version (Quality bar #7), which pure inline input-read + clipboard-write does.
+
+The structural slot for this bar lives in `templates/skeleton.html` alongside
+the pill and footer slots — read it once for the shape, then design the bar's
+look fresh to match the page.
+
 ### 6. Preview locally
 
 ```bash
@@ -256,9 +312,11 @@ open "$HTML_PATH"
 
 Opening the local preview is informational, not a gate — do **not** stop here to ask "should I publish?". The whole point of this skill is to hand the human a durable, link-shareable artifact; a gist that nobody had to approve is the success case, a forgotten local file is the failure case.
 
-### 7. Publish (default — no confirmation step)
+### 7. Publish (default — no confirmation step, no permission prompt)
 
 Publishing to a gist happens automatically. Do not pause for a `y`/`n`, do not ask permission, do not wait for the user to react to the preview. Just publish.
+
+**The upload requires no tool permission.** `publish.sh` is pre-authorized at the user level in `~/.claude/settings.json` (`permissions.allow` lists every invocation form — `bash`-prefixed and direct-exec, `~/.agents/...`, absolute `/Users/m1/.agents/...`, and the `~/.claude/skills/...` symlink path). Running it never raises a permission prompt. Treat the `publish.sh` call as a pre-approved, non-interactive command: invoke it exactly as written below — do not wrap it, do not rename the path, do not split it across shells — and never surface a permission/approval question for the upload itself. If you ever see a permission prompt for `publish.sh`, that is a settings regression to report, not a reason to ask the user to approve it manually.
 
 **Skip publishing only when the user has explicitly opted out.** Look back through the conversation for an unambiguous opt-out — e.g. "don't publish", "don't send", "local only", "just preview", "no gist", "别发 / 不要发 / 先别推 / 本地就行 / 不用推 gist". If and only if you find one:
 
@@ -270,13 +328,13 @@ In every other case — including when the caller is another agent, and includin
 
 If the user later wants changes, regenerate and re-run `publish.sh` — it creates a fresh gist. Don't treat the first publish as a point of no return.
 
-Before running `publish.sh`, perform a portability pass for the gist version:
+A portability pass is **built into `publish.sh`**: it greps the file for `file://` and local relative asset paths and prints any hits to stderr as a non-blocking warning, then publishes anyway. You do not need to run a separate prompted command before publishing — that would just add friction to a flow that is meant to be one pre-authorized call. If you *want* a pre-check before generating the gist (optional, not a gate), this standalone scan is equivalent:
 
 ```bash
 rg -n 'file://|src="(?!data:|https://)|href="(?!https://|http://127\.0\.0\.1|#|data:)' "$HTML_PATH"
 ```
 
-Any match that points to primary evidence, images, downloadable/source material, or a "click to view" affordance is a blocker. Convert it to embedded content or a public HTTPS URL first.
+A hit that points to primary evidence, images, downloadable/source material, or a "click to view" affordance is still a real defect — fix it by converting to embedded content or a public HTTPS URL, then re-run `publish.sh` (it makes a fresh gist). But the upload itself is never blocked or gated on this; `publish.sh` warns and proceeds.
 
 ```bash
 bash ~/.agents/skills/talk-html/publish.sh "$HTML_PATH"          # default: secret gist (link-only sharing)
@@ -285,11 +343,12 @@ bash ~/.agents/skills/talk-html/publish.sh "$HTML_PATH" --public # public gist (
 
 The script:
 
-1. Pushes via `gh gist create`, retries up to 3× on transient 5xx.
-2. Computes raw URL and `htmlpreview.github.io` rendered URL.
-3. Appends a row to `~/.agents/talk-html/index.jsonl`.
+1. Runs the non-blocking portability scan (warns on `file://`/local paths, never rejects).
+2. Pushes via `gh gist create`, retries up to 3× on transient 5xx.
+3. Computes raw URL and `htmlpreview.github.io` rendered URL.
+4. Appends a row to `~/.agents/talk-html/index.jsonl`.
 
-If `gh` is not installed or not authed, the script keeps the local file, prints instructions, and exits non-zero — surface this clearly to the user.
+It is pre-authorized at the user level (see §7) and runs with no permission prompt. If `gh` is not installed or not authed, the script keeps the local file, prints instructions, and exits non-zero (it does **not** prompt) — surface this clearly to the user.
 
 ### 8. Print URLs
 
@@ -330,6 +389,30 @@ bash ~/.agents/skills/talk-html/recall.sh <substring>
 
 The index lives at `~/.agents/talk-html/index.jsonl` — one JSON object per line.
 
+## Gallery (static, no server)
+
+A visual index of every artifact. It is a **single static HTML file** — no
+server is run. Thumbnails are downscaled and base64-inlined, cards are
+pre-rendered, and the only JS is a search filter + a copy button. It opens from
+`file://` and behaves identically once published to a gist.
+
+```bash
+cd ~/.agents/talk-html/_gallery && bun build.ts            # rebuild gallery.html (incremental thumbs)
+cd ~/.agents/talk-html/_gallery && bun build.ts --publish  # + push to a secret gist, print the htmlpreview URL
+cd ~/.agents/talk-html/_gallery && bun verify.ts           # judge harness → JSON verdict + proof PNG
+```
+
+- Each card's action links to the **previewed gist** (`rendered_url`,
+  `htmlpreview.github.io/?…`), never the raw gist page or a local path.
+  Unpublished pages show a muted "本地未发布" badge, no link.
+- There is **no sync button**. The header has a "复制更新指令" button that
+  copies a fixed prompt (the single-source-of-truth `UPDATE_PROMPT` constant in
+  `build.ts`) — paste it into Claude Code to rebuild + republish. `verify.ts`
+  asserts the embedded copy equals the constant byte-for-byte (no LLM in the
+  prompt path).
+- Share the gist's `htmlpreview` URL, not the gist page. `build.ts` aborts if
+  any `href`/`src` carries a local path, so the published gallery is portable.
+
 ## Failure modes
 
 | Failure | Recovery |
@@ -353,3 +436,4 @@ The index lives at `~/.agents/talk-html/index.jsonl` — one JSON object per lin
 6. Every HTML can be traced back to its originating session via three independent paths: the audit pill (shows the human-readable `origin_prompt` name and offers a copy-to-clipboard `claude --resume <id>` command to re-enter the conversation), the `<!-- talk-html-meta -->` comment, **and** the index.jsonl row. The pill must never reduce to a bare session hash, and must not rely on a `file://` transcript link — that link is dead in the published gist.
 7. Gist/htmlpreview parity: if the local preview has a visible GIF/image/evidence block or a clickable source/proof control, the rendered gist must expose the same material without broken `file://` or local relative links.
 8. Non-static content is recorded, not drawn (§3.1). Anything interactive, live/status, animated, or "this UI/demo/dashboard runs" — in the subject matter *or* the page itself — is backed by a real embedded video or GIF from a real-machine real-run capture, produced through the **project's own existing build code** — never reinvented build logic, never a static screenshot or mock standing in for motion. A page that is entirely static (essay, letter, past-decision recap) needs no recording; the moment something moves, it does.
+9. Every page ships the “继续修改” bar from §5.1 — a text input plus a copy-prompt button — so a reader can turn a requested change into one terminal paste without hand-copying any URL. The copied prompt is self-contained: a `claude --resume <id>` handle **plus** the `slug` + `recall.sh` relocation path, never only a `file://` link, and it works the same in the published gist as locally. This bar and the audit pill are the only scripted elements on the page.
