@@ -556,6 +556,46 @@ open "$HTML_PATH"
 
 Opening the local preview is informational, not a gate — do **not** stop here to ask "should I publish?". The whole point of this skill is to hand the human a durable, link-shareable artifact; a gist that nobody had to approve is the success case, a forgotten local file is the failure case.
 
+### 6.1 Post visual artifact analysis (blocking before publish)
+
+After the local preview opens, run a **post visual artifact analysis** pass
+before publishing. This is not design taste-checking; it is the guard that
+catches the common failure where a page embeds impressive evidence but the
+actual artifact is doubled, clipped, static, non-interactive, illegible on
+mobile, or not independently verifiable.
+
+Minimum pass:
+
+1. Open the generated HTML in a browser automation tool at one desktop viewport
+   (around 1440 px wide) and one mobile viewport (around 390-420 px wide).
+2. Capture screenshots or otherwise inspect the rendered page, not just the
+   source. Source grep alone is not enough.
+3. Inspect every visual artifact: GIF/video/poster/screenshot/SVG/table/TUI
+   frame. Check that it is visible once, sized correctly, legible, not clipped,
+   not overlapped by the audit pill, and truthful to the claim.
+4. If the page claims a dashboard, TUI, UI, or interaction, confirm whether the
+   page itself is interactive or whether the interaction is only a recorded
+   artifact. If the user's requirement asked for an interactive page, passive
+   GIFs are a finding, not a pass.
+5. Check `prefers-reduced-motion` fallback behavior when motion is present: the
+   poster must replace the motion artifact, not appear beside it.
+6. Check published-page portability hazards: no primary evidence depends on
+   `file://`, relative images, localhost, or local-only paths.
+7. Fix any HIGH or blocking issue, then re-run this analysis. Do not publish a
+   page with an unresolved visual blocker.
+
+When the page contains visual artifacts, include a compact collapsed section
+near 「诚实边界 / Verification notes」 titled **「视觉产物复查 /
+Post visual artifact analysis」**. It should be short and source-grounded:
+
+- what was inspected (desktop/mobile, artifact names);
+- what passed;
+- what was fixed after preview, if anything;
+- what remains a labeled limitation, if anything.
+
+Do not dump raw automation logs into the visible artifact. Link or name the
+raw evidence only if it is portable per §3.0.
+
 ### 7. Publish (default — no confirmation step, no permission prompt)
 
 Publishing to a gist happens automatically. Do not pause for a `y`/`n`, do not ask permission, do not wait for the user to react to the preview. Just publish.
@@ -596,7 +636,7 @@ It is pre-authorized at the user level (see §7) and runs with no permission pro
 
 ### 8. Print URLs
 
-Output exactly these four lines, in this order:
+Output these four lines first, in this order:
 
 ```
 local:    file://<path>
@@ -606,6 +646,41 @@ rendered: <htmlpreview.github.io URL>
 ```
 
 The **rendered** URL is the one the user shares with other humans. The **raw** URL is for re-fetching or embedding. The **gist** URL is for editing the file later.
+
+### 8.1 Final self-report (blocking before stopping)
+
+Before the agent stops, append a self-report block to the final chat response.
+This block is an attestation about the `talk-html` run, not content for the
+HTML page unless the user explicitly asks to embed it there.
+
+Use this exact shape:
+
+```xml
+<self-report>
+premature_stopping: <true|false>
+permission_seeking: <true|false>
+ownership_dodging: <true|false>
+simplest_fix: <true|false>
+reasoning_loop: <true|false>
+known_limitation: <true|false>
+skipped_repo_search: <true|false>
+fabricated_value: <true|false>
+placeholder_used: <true|false>
+ambiguity_unresolved: <true|false>
+contradiction_unresolved: <true|false>
+silent_fallback: <true|false>
+</self-report>
+```
+
+Interpret `true` as "bad pattern present." Evaluate honestly. If any field
+would be `true`, do not merely flip it to `false`: fix the underlying issue in
+the same turn when possible. Examples: run the missing repo search, finish the
+publish, replace a placeholder, surface a limitation explicitly, or ask one
+targeted question if ambiguity blocks correctness. Only then re-attest.
+
+`known_limitation` is `true` only when a limitation was known but not surfaced
+or handled. A limitation that is plainly documented in the page and final note
+is not a bad silent limitation.
 
 ### 9. (Optional) Verify CDN propagation
 
@@ -683,3 +758,11 @@ cd ~/.agents/talk-html/_gallery && bun verify.ts           # judge harness → J
 8. Non-static content is recorded, not drawn (§3.1). Anything interactive, live/status, animated, or "this UI/demo/dashboard runs" — in the subject matter *or* the page itself — is backed by a real embedded video or GIF from a real-machine real-run capture, produced through the **project's own existing build code** — never reinvented build logic, never a static screenshot or mock standing in for motion. A page that is entirely static (essay, letter, past-decision recap) needs no recording; the moment something moves, it does. When that capture fails, the §3.1.1 decision tree governs the fallback (①收窄结论 → ②用现有 code path 补建 → ③诚实标注 gap → ④block 上报) — a drawn substitute is never one of the exits.
 9. Every page ships the “继续修改” bar from §5.1 — a text input plus a copy-prompt button — so a reader can turn a requested change into one terminal paste without hand-copying any URL. The copied prompt bundles **three things**: the *original* user prompt (`origin_prompt`), the page's *own* URLs (rendered / gist / raw / local — filled in by `publish.sh` post-publish), and the reader's *new* request (`INSTR`) — all behind a `claude --resume <id>` handle, with the `slug` + `recall.sh` relocation path as the durable fallback, never only a `file://` link, and it works the same in the published gist as locally. This bar and the audit pill are the only scripted elements on the page.
 10. Convincing pages (proof / pitch / status / "show the boss / VC / customer") follow §3.2: inverted pyramid — one-sentence value claim + proof chain on the first screen; no secret / key / internal job-dir / host path / failed-take / compression-log in the visible artifact; real limitations preserved but collapsed into a final 「诚实边界 / Verification notes」 `<details>`; the embedded motion artifact is self-labeled (cover title + burned-in step labels, MP4-primary + poster) so it stands alone; copy in ≤3-line paragraphs, non-engineer-legible headings, zero hype adjectives; two real buyer types get two re-framed tracks over the same evidence, never a fabricated second audience. Pure static communication (essay / letter / recap) is exempt.
+11. Before publishing, every page goes through §6.1 post visual artifact
+analysis at desktop and mobile sizes. Any HIGH visual blocker must be fixed and
+rechecked before `publish.sh`. If visual artifacts exist, the page includes the
+collapsed 「视觉产物复查 / Post visual artifact analysis」 section near the
+verification notes.
+12. The final chat response appends the exact §8.1 `<self-report>` block. Any
+`true` value must trigger a concrete fix, disclosure, or targeted question
+before stopping; do not paper over a true bad-pattern field.
