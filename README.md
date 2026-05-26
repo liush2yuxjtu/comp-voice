@@ -1,5 +1,8 @@
 # comp-voice
 
+> **Experimental Preview · 2026-05**  
+> Code: <https://github.com/LiuShiyuMath/comp-voice> · Feedback: <https://github.com/LiuShiyuMath/comp-voice/issues/1>
+
 > comp-voice is a local Claude Code plugin that turns meeting audio into a 微信公众号 draft, while preserving every intermediate artifact — transcript, enterprise context, synthesis, draft, preview URL, and `judge.json` — so the output can be **reviewed** instead of blindly trusted.
 >
 > 中文版: comp-voice 不是 "再写一篇 AI 公众号", 而是把录音、企业上下文、历史公众号语气和第三方评审证据串成一条本地流水线, 让每篇草稿都有可追溯的证据目录.
