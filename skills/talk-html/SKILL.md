@@ -1,6 +1,6 @@
 ---
 name: talk-html
-description: Talk to humans in HTML, not chat. Generate a polished, self-contained zh-CN HTML page from the current conversation, preview it locally, and publish it to a GitHub gist by default unless the user explicitly opts out. If the user's request includes diagnose/fix/implement/update/build work, do that real work first in the relevant codebase, including feature code, build code, generated artifacts, tests, and verification as needed; the HTML is the final human-facing report, never a substitute for implementation. The page MUST use real content — dive deep into the relevant repo(s) to find the actual code/data/artifacts behind every visual, or build the missing source with existing code paths; never draw a demo or mock unless the user explicitly asks for one. Any non-static content — interactive features, live/status boards, animations, running demos — MUST carry an embedded real video or GIF captured from a real run, never a static screenshot or diagram standing in for motion. Use for shareable explainers, recaps, status boards, letters, durable breadcrumbs, or prompts like /talk-html, talk in html, make a page, publish as gist, 用 html 解释, 做个网页, 推到 gist, or html 版本.
+description: Talk to humans in HTML, not chat. Generate a polished, self-contained zh-CN HTML page from the current conversation, preview it locally, and publish it to a GitHub gist unless the user opts out. If the user asks to diagnose, fix, implement, update, build, test, or verify, do that real work first: requirements first, then update feature/runtime code, visualization/artifact code, generated outputs, and verification as needed. Existing implementations are not automatically acceptable; if they fail the requested feature or recording requirement, fix them before reporting. Non-static content must embed a real video/GIF from a real run. Use for shareable explainers, recaps, status boards, letters, durable breadcrumbs, or prompts like /talk-html, talk in html, make a page, publish as gist, 用 html 解释, 做个网页.
 ---
 
 # talk-html
@@ -17,6 +17,15 @@ Communicate in HTML, not chat. Local preview first, then gist-publish for perman
 > defect lives in artifact-generation code, update that build path. When the
 > deliverable includes generated artifacts, rebuild them through the project's
 > existing commands and include the before/after evidence in the page.
+
+> **Requirements-first existing-implementation rule.** Finding that a project
+> already has an implementation is only the start of evaluation, not a reason to
+> stop. Compare the existing implementation against the user's requested
+> features, acceptance criteria, and recording/reporting needs. If the current
+> implementation is bad, incomplete, unrecordable, hard to adapt, or fails the
+> requested feature, update the **feature/runtime code** and the
+> **visualization/artifact-generation code** needed to build new real artifacts.
+> Then rebuild the artifacts and report the before/after evidence in HTML.
 
 > **Load-bearing principle — real content, not drawn demos.** Every page MUST be
 > grounded in real sources. Before designing, dive deep into the relevant repo(s)
@@ -125,6 +134,23 @@ For **Work-then-report**, these are hard requirements:
 5. If you cannot safely modify the needed code because the repo, credentials,
    build path, or acceptance target is missing, say that plainly and stop or
    publish a blocked report. Never silently switch into "visual-only" mode.
+
+### 1.6 Existing implementation check (requirements first)
+
+When the repo already contains an implementation, do **not** assume it satisfies
+the request. Apply this rule before recording or building the HTML:
+
+1. Restate the user's required features and acceptance target first.
+2. Compare the existing implementation to those requirements.
+3. If the implementation already satisfies the requirements and can be recorded
+   through the project's real build/run path, use it and capture evidence.
+4. If it is bad, incomplete, hard to implement against, hard to record, or fails
+   the requested feature, update both layers that matter:
+   - **feature/runtime code** so the product behavior actually meets the request;
+   - **visualization/artifact code** so the report can build new real artifacts
+     from that behavior.
+5. Rebuild through existing project commands, capture before/after proof, and
+   only then write/publish the `talk-html` page.
 
 ### 2. Pick a template
 
