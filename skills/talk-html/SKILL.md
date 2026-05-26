@@ -1,11 +1,22 @@
 ---
 name: talk-html
-description: Talk to humans in HTML, not chat. Generate a polished, self-contained zh-CN HTML page from the current conversation, preview it locally, and publish it to a GitHub gist by default unless the user explicitly opts out. The page MUST use real content — dive deep into the relevant repo(s) to find the actual code/data/artifacts behind every visual, or build the missing source with existing code paths; never draw a demo or mock unless the user explicitly asks for one. Any non-static content — interactive features, live/status boards, animations, running demos — MUST carry an embedded real video or GIF captured from a real run, never a static screenshot or diagram standing in for motion. Use for shareable explainers, recaps, status boards, letters, durable breadcrumbs, or prompts like /talk-html, talk in html, make a page, publish as gist, 用 html 解释, 做个网页, 推到 gist, or html 版本.
+description: Talk to humans in HTML, not chat. Generate a polished, self-contained zh-CN HTML page from the current conversation, preview it locally, and publish it to a GitHub gist by default unless the user explicitly opts out. If the user's request includes diagnose/fix/implement/update/build work, do that real work first in the relevant codebase, including feature code, build code, generated artifacts, tests, and verification as needed; the HTML is the final human-facing report, never a substitute for implementation. The page MUST use real content — dive deep into the relevant repo(s) to find the actual code/data/artifacts behind every visual, or build the missing source with existing code paths; never draw a demo or mock unless the user explicitly asks for one. Any non-static content — interactive features, live/status boards, animations, running demos — MUST carry an embedded real video or GIF captured from a real run, never a static screenshot or diagram standing in for motion. Use for shareable explainers, recaps, status boards, letters, durable breadcrumbs, or prompts like /talk-html, talk in html, make a page, publish as gist, 用 html 解释, 做个网页, 推到 gist, or html 版本.
 ---
 
 # talk-html
 
 Communicate in HTML, not chat. Local preview first, then gist-publish for permanence. **Output language is always Simplified Chinese.**
+
+> **Implementation-first principle — the page is the report, not the work.** If
+> the user's request contains real execution verbs such as diagnose, fix,
+> implement, update code, build artifacts, regenerate outputs, test, or verify,
+> complete that work before writing the HTML. `talk-html` may wrap the result in
+> a beautiful, durable page, but it must not downgrade an implementation request
+> into "only update the visual artifact" or "only write the report." When the
+> defect lives in feature/runtime code, update feature/runtime code. When the
+> defect lives in artifact-generation code, update that build path. When the
+> deliverable includes generated artifacts, rebuild them through the project's
+> existing commands and include the before/after evidence in the page.
 
 > **Load-bearing principle — real content, not drawn demos.** Every page MUST be
 > grounded in real sources. Before designing, dive deep into the relevant repo(s)
@@ -40,8 +51,14 @@ Communicate in HTML, not chat. Local preview first, then gist-publish for perman
 - The user said "html version", "make a page", "publish this", "share this with X".
 - The user wants to remember today's decision/insight in a recallable, linkable form.
 - Another agent needs to hand a polished communication to a human user.
+- The user asks for diagnosis, fixes, implementation, artifact regeneration, or
+  before/after proof **and** asks to report it with `$talk-html`.
 
-If the topic is **a finished UI feature / production page** belonging to a real product, use `frontend-design` or `design-html` instead. `talk-html` is for ephemeral communication artifacts, not shipped product UI.
+If the topic is **a finished UI feature / production page** belonging to a real
+product, use `frontend-design` or `design-html` for the product UI work, then
+use `talk-html` only as the communication wrapper if the user asked for a
+shareable report. This boundary does **not** forbid editing product feature
+code when the user's actual request is to diagnose or fix a product problem.
 
 ## Workflow
 
@@ -80,6 +97,34 @@ Identify what you are communicating. Look at:
 - If the user gave you a topic phrase, use that as the spine.
 
 Synthesize a `slug` (3–5 kebab-case words) and a one-sentence `prompt_summary` (≤ 200 chars).
+
+### 1.5 Implementation-first gate (blocking when the prompt asks for work)
+
+Before choosing the page shape, classify the request:
+
+- **Report-only**: recap, explain, letter, memo, status from already-finished
+  work. Proceed to §2.
+- **Work-then-report**: diagnose, fix, implement, update code, build/regenerate
+  artifacts, test, verify, or "before/after." First finish the real work, then
+  proceed to §2 with the evidence.
+
+For **Work-then-report**, these are hard requirements:
+
+1. Do not stop at HTML. Inspect the relevant repo, reproduce or localize the
+   problem, edit the correct source files, and run the appropriate verification.
+2. Do not restrict yourself to artifact-generation code. If the root cause is
+   feature/runtime code, update feature/runtime code. If the root cause is docs,
+   tests, build scripts, or generated artifacts, update those instead. The
+   target follows the defect, not the reporting medium.
+3. If generated artifacts are part of the deliverable, rebuild them through the
+   project's existing commands or documented pipeline. Do not invent a parallel
+   build path just to make the report look good.
+4. Capture before/after evidence: relevant diff, commands, exit codes, generated
+   artifact paths, screenshots/GIF/video when §3.1 applies, and any remaining
+   honest boundary. The HTML report must summarize this evidence in Chinese.
+5. If you cannot safely modify the needed code because the repo, credentials,
+   build path, or acceptance target is missing, say that plainly and stop or
+   publish a blocked report. Never silently switch into "visual-only" mode.
 
 ### 2. Pick a template
 
