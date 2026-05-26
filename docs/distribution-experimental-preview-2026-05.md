@@ -1,11 +1,14 @@
 # company-voice Experimental Preview Distribution Copy
 
 Canonical links:
+- Launch room: https://htmlpreview.github.io/?https://gist.githubusercontent.com/LiuShiyuMath/483c6187f2b8c5830190f5a358f628ba/raw/agenticpm-company-voice-launch-room-20260527.html
 - Demo: https://htmlpreview.github.io/?https://gist.githubusercontent.com/LiuShiyuMath/c8a8c8dda05a8ce6c6d043d20f0737f0/raw/company-voice-experimental-preview-20260527.html
 - Code: https://github.com/LiuShiyuMath/comp-voice
 - Release: https://github.com/LiuShiyuMath/comp-voice/releases/tag/experimental-preview-2026-05-company-voice
 - Feedback: https://github.com/LiuShiyuMath/comp-voice/issues/1
 - Landing: https://liushiyumath.github.io/comp-voice/
+
+Use the Launch room as the first link for cross-channel distribution; use the single-project Demo link only when the audience already asked specifically about company-voice.
 
 ## English
 
@@ -15,6 +18,7 @@ The point is not just "AI writes a draft." The point is that every intermediate 
 
 Start with the golden-run folder if you want to inspect the product without installing anything.
 
+Launch room: https://htmlpreview.github.io/?https://gist.githubusercontent.com/LiuShiyuMath/483c6187f2b8c5830190f5a358f628ba/raw/agenticpm-company-voice-launch-room-20260527.html
 Demo: https://htmlpreview.github.io/?https://gist.githubusercontent.com/LiuShiyuMath/c8a8c8dda05a8ce6c6d043d20f0737f0/raw/company-voice-experimental-preview-20260527.html
 Code: https://github.com/LiuShiyuMath/comp-voice
 Feedback: https://github.com/LiuShiyuMath/comp-voice/issues/1
@@ -29,6 +33,7 @@ Question: does the evidence folder make the generated article easier to trust an
 
 如果不想安装，先看 golden-run artifact 就能理解完整 pipeline。
 
+Launch room: https://htmlpreview.github.io/?https://gist.githubusercontent.com/LiuShiyuMath/483c6187f2b8c5830190f5a358f628ba/raw/agenticpm-company-voice-launch-room-20260527.html
 Demo: https://htmlpreview.github.io/?https://gist.githubusercontent.com/LiuShiyuMath/c8a8c8dda05a8ce6c6d043d20f0737f0/raw/company-voice-experimental-preview-20260527.html
 Code: https://github.com/LiuShiyuMath/comp-voice
 Feedback: https://github.com/LiuShiyuMath/comp-voice/issues/1
