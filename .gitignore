@@ -11,3 +11,8 @@
 
 # OS noise
 .DS_Store
+.gstack/
+
+# Local Claude Code state (machine-specific, not for sharing)
+.claude/settings.local.json
+.claude/worktrees/
