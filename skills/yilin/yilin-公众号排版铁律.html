@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易临 yilin · 公众号排版铁律</title>
+</head>
+<body style="margin:0;padding:24px 0;background:rgb(245,245,245);">
+
+<div style="max-width:677px;margin:0 auto;background:rgb(255,255,255);padding:28px 0;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',Arial,sans-serif;">
+
+  <p style="font-size:72px;font-weight:900;line-height:1;color:rgb(232,221,207);text-align:center;margin:0 16px 0;">易临</p>
+  <p style="font-size:13px;letter-spacing:0.3em;color:rgb(180,170,155);text-align:center;margin:0 16px 26px;">YILIN · 公众号排版铁律</p>
+
+  <p style="font-size:20px;font-weight:700;line-height:1.6;color:rgb(30,30,30);margin:0 16px 18px;">把中文，排成粘贴不变形的公众号页</p>
+
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 16px;">全选复制进微信公众号编辑器，样式原样存活。靠的不是运气，是八条铁律加全内联交付——编辑器删得掉 &lt;style&gt;，删不掉写在标签上的 style。</p>
+
+  <p style="font-size:14px;line-height:0;color:rgb(207,58,35);margin:0 16px 26px;">——————————</p>
+
+  <p style="font-size:48px;font-weight:900;line-height:1;color:rgb(238,231,217);margin:0 16px 0;">崩</p>
+  <p style="font-size:20px;font-weight:700;line-height:1.6;color:rgb(30,30,30);margin:0 16px 14px;">为什么排版会崩</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 26px;">公众号编辑器在粘贴的一瞬间，删掉 &lt;style&gt; 标签、删掉所有 class 选择器、拦截外链图片——只留下写在每个标签上的内联样式。yilin 就是为这条生存线设计的。</p>
+
+  <p style="font-size:48px;font-weight:900;line-height:1;color:rgb(238,231,217);margin:0 16px 0;">铁律</p>
+  <p style="font-size:20px;font-weight:700;line-height:1.6;color:rgb(30,30,30);margin:0 16px 18px;">八条排版铁律</p>
+
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 14px;"><span style="font-size:17px;font-weight:700;color:rgb(207,58,35);">01　正文 14px。</span>所有正文段落统一字号，是整页的基准刻度。</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 14px;"><span style="font-size:17px;font-weight:700;color:rgb(207,58,35);">02　小标题 17 或 20px。</span>两级小标题只在这两个值里选，配粗体。</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 14px;"><span style="font-size:17px;font-weight:700;color:rgb(207,58,35);">03　行间距 1.6。</span>默认不另调，是中文段落呼吸感的安全值。</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 14px;"><span style="font-size:17px;font-weight:700;color:rgb(207,58,35);">04　两端各缩 16px。</span>正文与块统一左右各退 16px，留出版心。</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 14px;"><span style="font-size:17px;font-weight:700;color:rgb(207,58,35);">05　只控段后距。</span>不设段前距，只用底部 margin-bottom 控制段间隔。</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 14px;"><span style="font-size:17px;font-weight:700;color:rgb(207,58,35);">06　该居中处居中。</span>靠父元素 text-align center，其余默认左对齐。</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 14px;"><span style="font-size:17px;font-weight:700;color:rgb(207,58,35);">07　浅色大字可放大。</span>极浅灰 60 到 80px 的序号或大标题，自由处理大小与位置。</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 26px;"><span style="font-size:17px;font-weight:700;color:rgb(207,58,35);">08　中文标点全角。</span>逗号句号顿号冒号分号引号括号破折号一律全角；英文术语如 comp-voice、judge.json 保留原样。</p>
+
+  <p style="font-size:48px;font-weight:900;line-height:1;color:rgb(238,231,217);margin:0 16px 0;">内联</p>
+  <p style="font-size:20px;font-weight:700;line-height:1.6;color:rgb(30,30,30);margin:0 16px 14px;">交付机制 · 全内联</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 16px;">让八条铁律在公众号编辑器里真正活下来：全部样式写在每个元素的 style 上；不写 &lt;style&gt; 块；不用 class 选择器；不嵌外链图片，需要图位时留占位块；居中靠父元素 text-align center，不靠 margin auto；外层容器 max-width 677px 居中。</p>
+
+  <p style="font-size:13px;line-height:1.6;color:rgb(150,150,150);text-align:center;border:1px dashed rgb(210,210,210);margin:0 16px 26px;padding:22px 12px;">［ 图位占位块：在公众号编辑器里从素材库上传配图 ］</p>
+
+  <p style="font-size:48px;font-weight:900;line-height:1;color:rgb(238,231,217);margin:0 16px 0;">命令</p>
+  <p style="font-size:20px;font-weight:700;line-height:1.6;color:rgb(30,30,30);margin:0 16px 14px;">一行命令，排好就能贴</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(51,51,51);margin:0 16px 16px;">输入内容来源——markdown 路径，或直接粘正文。yilin 逐字保留，不改写、不润色，只把它排成全内联的公众号 HTML，自检通过后用浏览器打开。在渲染页面上全选复制，粘进公众号编辑器即可。</p>
+
+  <p style="font-size:14px;line-height:0;color:rgb(207,58,35);margin:24px 16px 18px;">——————————</p>
+  <p style="font-size:14px;font-weight:700;line-height:1.6;color:rgb(51,51,51);text-align:center;margin:0 16px 4px;">只排版，不创作。</p>
+  <p style="font-size:14px;line-height:1.6;color:rgb(120,120,120);text-align:center;margin:0 16px 0;">粘贴安全优先于好看。</p>
+
+</div>
+
+</body>
+</html>
