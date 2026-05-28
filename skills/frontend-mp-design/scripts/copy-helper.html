@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>复制到公众号 · frontend-mp-design</title>
+<style>
+  /* This <style> is for the HELPER UI only — it is NOT copied to WeChat.
+     The article markup (already inline-styled) lives in #article below and is
+     what gets written to the clipboard. */
+  body{margin:0;background:#f4f4f2;font-family:-apple-system,"PingFang SC","Noto Sans SC",system-ui,sans-serif;color:#1a1a1a}
+  .bar{position:sticky;top:0;display:flex;gap:12px;align-items:center;justify-content:space-between;
+       padding:12px 18px;background:#111;color:#fff;z-index:10}
+  .bar b{font-size:14px;font-weight:600}
+  .bar small{color:#9ca3af;font-size:12px}
+  button{appearance:none;border:0;border-radius:8px;padding:10px 18px;font-size:14px;font-weight:700;
+         background:#1E40AF;color:#fff;cursor:pointer}
+  button:active{transform:translateY(1px)}
+  #status{font-size:13px;color:#10b981;min-width:120px;text-align:right}
+  .stage{max-width:760px;margin:24px auto;padding:0 12px}
+  .hint{font-size:12px;color:#6b7280;margin:8px 2px 18px;line-height:1.6}
+  #article{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 18px rgba(0,0,0,.08)}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <b>复制到公众号</b>
+    <small>把样式以 text/html 写入剪贴板 → 直接粘进 图文编辑器</small>
+    <span style="display:flex;gap:12px;align-items:center">
+      <span id="status"></span>
+      <button id="copy">复制到公众号</button>
+    </span>
+  </div>
+
+  <div class="stage">
+    <div class="hint">
+      点上方按钮 → 打开公众号「图文编辑器」→ Ctrl/Cmd+V 粘贴。<br>
+      下面是即将复制的内容（已内联样式、已清洗）。图片若不是 <code>mmbiz.qpic.cn</code> 域名，需先传素材库再替换。
+    </div>
+    <!-- frontend-mp-design injects the cleaned ARTICLE markup (the <section> subtree
+         from mp.html, already inline-styled) in place of the placeholder below. -->
+    <div id="article">MPDESIGN_CONTENT_PLACEHOLDER</div>
+  </div>
+
+<script>
+  const article = document.getElementById('article');
+  const statusEl = document.getElementById('status');
+  function flash(msg, ok = true) {
+    statusEl.textContent = msg;
+    statusEl.style.color = ok ? '#10b981' : '#ef4444';
+    setTimeout(() => (statusEl.textContent = ''), 4000);
+  }
+  async function copyRich() {
+    const html = article.innerHTML;
+    const plain = article.innerText;
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/html': new Blob([html], { type: 'text/html' }),
+          'text/plain': new Blob([plain], { type: 'text/plain' }),
+        }),
+      ]);
+      flash('已复制 ✓ 去公众号粘贴');
+      return;
+    } catch (_) { /* fall through to execCommand path */ }
+    // Fallback: select the live nodes and execCommand('copy') — preserves text/html.
+    const range = document.createRange();
+    range.selectNodeContents(article);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    const ok = document.execCommand('copy');
+    sel.removeAllRanges();
+    flash(ok ? '已复制 ✓ 去公众号粘贴' : '复制失败，请手动全选复制', ok);
+  }
+  document.getElementById('copy').addEventListener('click', copyRich);
+</script>
+</body>
+</html>
