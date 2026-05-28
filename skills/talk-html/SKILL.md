@@ -1,6 +1,19 @@
 ---
 name: talk-html
-description: Talk to humans in HTML, not chat. Generate a polished, self-contained zh-CN HTML page from the current conversation, preview it locally, and publish it to a GitHub gist unless the user opts out. If the user asks to diagnose, fix, implement, update, build, test, or verify, do that real work first: requirements first, then update feature/runtime code, visualization/artifact code, generated outputs, and verification as needed. Existing implementations are not automatically acceptable; if they fail the requested feature or recording requirement, fix them before reporting. Non-static content must embed a real video/GIF from a real run. Use for shareable explainers, recaps, status boards, letters, durable breadcrumbs, or prompts like /talk-html, talk in html, make a page, publish as gist, 用 html 解释, 做个网页.
+description: >-
+  Talk to humans in HTML, not chat. Generate a polished, self-contained zh-CN
+  HTML page from the current conversation, preview it locally, and publish it to
+  a GitHub gist unless the user opts out. If the user asks to diagnose, fix,
+  implement, update, build, test, or verify, do that real work first:
+  requirements first, then update feature/runtime code, visualization/artifact
+  code, generated outputs, and verification as needed. Existing implementations
+  are not automatically acceptable; if they fail the requested feature or
+  recording requirement, fix them before reporting. Non-static content must
+  embed a real video/GIF from a real run. Every page must pass the mandatory
+  frontend-skill design gate at `/Users/m1/.codex/skills/frontend-skill/SKILL.md`.
+  Use for shareable explainers, recaps, status boards, letters, durable
+  breadcrumbs, or prompts like /talk-html, talk in html, make a page, publish as
+  gist, 用 html 解释, 做个网页.
 ---
 
 # talk-html
@@ -40,6 +53,17 @@ Communicate in HTML, not chat. Local preview first, then gist-publish for perman
 > never a static screenshot or diagram standing in for motion. §3.0 and §3.1
 > below make this concrete and active.
 
+> **Frontend-skill gate — art direction is mandatory.** Every `talk-html` run
+> that writes or rewrites an HTML page MUST load and apply
+> `/Users/m1/.codex/skills/frontend-skill/SKILL.md` before design work starts.
+> Treat that skill as the required art-direction layer: composition first,
+> strong hierarchy, real visual anchor when the page calls for one, restrained
+> copy, cardless-by-default layout, and deliberate motion/interaction choices.
+> If `frontend-skill` and this file ever pull in different directions, this file
+> wins on provenance, zh-CN language, no-general-JS, self-containment, recording,
+> and gist portability; `frontend-skill` wins on visual quality, hierarchy, and
+> taste. Do not ship a generic report page merely because the evidence is real.
+
 > **Source-of-truth guard — read this before any self-referential run.** The
 > *only* canonical spec for this skill is `~/.agents/skills/talk-html/SKILL.md`
 > (the symlink target that `~/.claude/skills/talk-html` and
@@ -64,10 +88,11 @@ Communicate in HTML, not chat. Local preview first, then gist-publish for perman
   before/after proof **and** asks to report it with `$talk-html`.
 
 If the topic is **a finished UI feature / production page** belonging to a real
-product, use `frontend-design` or `design-html` for the product UI work, then
-use `talk-html` only as the communication wrapper if the user asked for a
-shareable report. This boundary does **not** forbid editing product feature
-code when the user's actual request is to diagnose or fix a product problem.
+product, use `/Users/m1/.codex/skills/frontend-skill/SKILL.md` for the product
+UI art direction and implementation review, then use `talk-html` only as the
+communication wrapper if the user asked for a shareable report. This boundary
+does **not** forbid editing product feature code when the user's actual request
+is to diagnose or fix a product problem.
 
 ## Workflow
 
@@ -168,6 +193,43 @@ For `pitch` / `status` and any "show the boss / VC / customer" proof page, the
 template only picks the skeleton — the page's job is to *convince a specific
 reader*, so also apply **§3.2 (audience-first structure)** before writing.
 
+### 2.5 Frontend-skill design gate (blocking before HTML)
+
+Before writing any HTML, load `/Users/m1/.codex/skills/frontend-skill/SKILL.md`
+and apply it to this page. This is mandatory even for static editorial pages:
+`talk-html` pages are human-facing frontend artifacts, not raw reports.
+
+Write these three items in scratch/context before building:
+
+- **visual thesis**: one sentence describing the page's mood, material, and
+  energy;
+- **content plan**: the page's major sections and the single job each section
+  performs;
+- **interaction thesis**: 2-3 restraint-first motion or interaction choices, or
+  an explicit decision that the page stays static because motion would weaken
+  clarity.
+
+Hard application rules:
+
+- Start from composition, hierarchy, spacing, typography, and source-backed
+  media. Do not default to stacked cards, centered SaaS heroes, pill soup,
+  dashboard-card mosaics, decorative gradients, or filler copy.
+- For proof / pitch / status pages, the first viewport must behave like a
+  convincing poster: one repeatable value claim, one dominant proof or visual
+  anchor, and a clear reader action. Internal build notes move to the collapsed
+  verification section per §3.2.
+- For operational/app-like pages, use utility copy and dense-but-readable
+  structure. No marketing hero unless the user's requested artifact is actually
+  a landing page or pitch.
+- If the interaction thesis introduces real page motion or interaction beyond
+  the two sanctioned clipboard utilities, §3.1 applies: record and embed a real
+  video/GIF from the real run, or simplify back to a static page. Do not add JS
+  or fake motion to satisfy the design gate.
+- The final page must satisfy both this gate and the `frontend-skill` litmus
+  checks: unmistakable subject, one strong visual anchor when appropriate,
+  scannable headings, one job per section, necessary cards only, and motion only
+  when it improves hierarchy or atmosphere.
+
 ### 3. Write the HTML
 
 Save to: `~/.agents/talk-html/<slug>-YYYYMMDD-HHMMSS.html`
@@ -200,7 +262,13 @@ Hard requirements:
 - **Self-contained**: inline CSS, no external JS. Google Fonts via `<link>` is allowed. JS is sanctioned in exactly **two** narrow places, both pure clipboard utilities, never general page scripting:
   1. the **audit pill** copy handlers — `copy id` and copy-`claude --resume` (§5);
   2. the **“继续修改” bar** prompt builder (§5.1) — reads one text input and writes one clipboard string.
-  Both are inline `onclick`/IIFE handlers with no network, no timers, and no DOM mutation beyond reading their own input. They are utility chrome, not page content, so they do **not** count as “non-static content” under §3.1 (the same carve-out the pill always had). Anything past these two — animation, `fetch`, frameworks, reveal logic — is out of bounds; a page that seems to need it is the wrong job for this skill (use `frontend-design`).
+  Both are inline `onclick`/IIFE handlers with no network, no timers, and no DOM mutation beyond reading their own input. They are utility chrome, not page content, so they do **not** count as “non-static content” under §3.1 (the same carve-out the pill always had). Anything past these two — animation, `fetch`, frameworks, reveal logic — is out of bounds; a page that seems to need it is the wrong job for this skill; use `frontend-skill` for the product/UI artifact and keep `talk-html` as the published report wrapper.
+- **Frontend-skill compliance (load-bearing)**: The page must show evidence
+  that §2.5 shaped the design: clear visual thesis, disciplined content
+  hierarchy, cardless-by-default composition, real/source-backed visual anchor
+  when appropriate, restrained copy, and no generic SaaS report aesthetic.
+  These choices do not loosen any `talk-html` constraints; they raise the visual
+  bar inside them.
 - **Editorial typography**: pair a Latin display/body family with **Noto Serif SC** (思源宋体) — the Chinese face must carry the body text, not fall through to a system default. Recommended pairings: Fraunces + Noto Serif SC, or Newsreader + Noto Serif SC. Name the typographic mood in one sentence (Chinese is fine); if you cannot, redo it.
 - **Diagrams**: SVG. Diagram labels in Chinese (or technical English where labels reference real identifiers like `index.jsonl`). Reserve ASCII art for explicit "terminal" flavor sections only.
 - **Reflow**: works on mobile (≤ 420 px). No fixed pixel heights that clip text. Chinese reflows differently from English — test the narrow viewport.
@@ -766,3 +834,9 @@ verification notes.
 12. The final chat response appends the exact §8.1 `<self-report>` block. Any
 `true` value must trigger a concrete fix, disclosure, or targeted question
 before stopping; do not paper over a true bad-pattern field.
+13. Every HTML-writing run passes the §2.5 frontend-skill design gate before
+§3: load `/Users/m1/.codex/skills/frontend-skill/SKILL.md`, write the visual
+thesis / content plan / interaction thesis in scratch/context, and enforce its
+composition, hierarchy, cardless-by-default, imagery, copy, and motion litmus
+checks without violating talk-html's zh-CN, no-general-JS, real-evidence,
+recording, and portability rules.
